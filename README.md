@@ -1,17 +1,23 @@
-# Database MCP Server
+# Project Guardian MCP
 
-A comprehensive Model Context Protocol (MCP) server for database operations with SQLite support. This server provides structured database management capabilities including database creation, table management, CRUD operations, import/export functionality, and advanced SQL execution.
+A focused Model Context Protocol (MCP) server designed as your project's memory system and workflow guardian. This server provides streamlined database operations and advanced knowledge graph capabilities for intelligent project management, with exactly 17 tools to maintain clarity and focus.
 
 ## Features
 
-### Core Database Operations
-- **Database Management**: Create, list, and drop SQLite databases
-- **Default Memory Database**: Automatically creates `memory.db` in the server directory for persistent storage
-- **Table Management**: Create, list, describe, and drop tables with schema support
-- **CRUD Operations**: Insert, query, update, delete, and count records
-- **SQL Execution**: Execute raw SQL queries with parameter support
-- **Import/Export**: Import from CSV, JSON, and SQL files; export to multiple formats
-- **Backup/Restore**: Create and restore database backups
+### Project Guardian Memory System
+- **Knowledge Graph**: Maintain project entities, relationships, and observations
+- **Entity Management**: Projects, tasks, people, resources with rich metadata
+- **Relationship Mapping**: Dependencies, ownership, blockers, and connections
+- **Observation Tracking**: Contextual notes and progress updates
+- **Semantic Search**: Full-text search across all project knowledge
+- **Memory Persistence**: Automatic persistence in SQLite database
+
+### Streamlined Database Operations
+- **Single Database**: Uses only `memory.db` for all operations
+- **Core CRUD**: Essential database operations (query, insert, update, delete)
+- **SQL Execution**: Direct SQL query execution
+- **Data Transfer**: Import/export CSV and JSON files
+- **17 Tools Total**: Focused toolset for maximum clarity
 
 ### Advanced Features
 - **Schema Validation**: Comprehensive input validation with Zod schemas
@@ -86,905 +92,290 @@ Add this server to your Claude Desktop configuration (`claude_desktop_config.jso
 
 ## Available Tools
 
-This MCP server provides **16 powerful tools** for comprehensive database management:
+This MCP server provides **exactly 17 focused tools** for project guardianship:
 
-### 1. Database Management
+### Database Operations (7 tools)
 
-#### `create_database` - Create Database
-Create a new SQLite database.
-
-**Parameters:**
-- `name` (required): Database name
-- `type` (optional): Database type (default: "sqlite")
-- `path` (optional): Database file path (auto-generated for SQLite)
-
-**Example:**
-```json
-{
-  "name": "create_database",
-  "arguments": {
-    "name": "my_app_db",
-    "type": "sqlite"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Database 'my_app_db' created successfully",
-  "data": {
-    "name": "my_app_db",
-    "path": "./my_app_db.db"
-  },
-  "executionTime": 45
-}
-```
-
-#### `list_databases` - List Databases
-List all available databases.
+#### `execute_sql` - Execute SQL Query
+Execute raw SQL queries on memory.db.
 
 **Parameters:**
-- `type` (optional): Filter by database type
+- `query` (required): SQL query string
+- `parameters` (optional): Query parameters array
 
-**Example:**
-```json
-{
-  "name": "list_databases",
-  "arguments": {}
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Found 2 databases",
-  "data": [
-    {
-      "name": "my_app_db",
-      "type": "sqlite",
-      "path": "./my_app_db.db",
-      "size": 2048,
-      "createdAt": "2024-01-15T10:30:00.000Z",
-      "modifiedAt": "2024-01-15T10:30:00.000Z"
-    }
-  ],
-  "executionTime": 12
-}
-```
-
-#### `drop_database` - Drop Database
-Delete a database.
+#### `query_data` - Query Table Data
+Query data from memory.db tables with filtering and pagination.
 
 **Parameters:**
-- `name` (required): Database name
-- `type` (optional): Database type (default: "sqlite")
-
-**Example:**
-```json
-{
-  "name": "drop_database",
-  "arguments": {
-    "name": "my_app_db"
-  }
-}
-```
-
-### 2. Table Management
-
-#### `create_table` - Create Table
-Create a new table with schema definition.
-
-**Parameters:**
-- `database` (required): Database name
-- `name` (required): Table name
-- `schema` (required): Table schema definition
-
-**Schema Structure:**
-```json
-{
-  "columns": [
-    {
-      "name": "id",
-      "type": "INTEGER",
-      "constraints": ["PRIMARY KEY", "AUTOINCREMENT"]
-    },
-    {
-      "name": "name",
-      "type": "TEXT",
-      "constraints": ["NOT NULL"]
-    },
-    {
-      "name": "email",
-      "type": "TEXT",
-      "constraints": ["UNIQUE"]
-    },
-    {
-      "name": "created_at",
-      "type": "DATETIME",
-      "defaultValue": "CURRENT_TIMESTAMP"
-    }
-  ],
-  "primaryKey": ["id"],
-  "indexes": [
-    {
-      "name": "idx_email",
-      "columns": ["email"],
-      "unique": true
-    }
-  ]
-}
-```
-
-**Example:**
-```json
-{
-  "name": "create_table",
-  "arguments": {
-    "database": "my_app_db",
-    "name": "users",
-    "schema": {
-      "columns": [
-        {
-          "name": "id",
-          "type": "INTEGER",
-          "constraints": ["PRIMARY KEY", "AUTOINCREMENT"]
-        },
-        {
-          "name": "name",
-          "type": "TEXT",
-          "constraints": ["NOT NULL"]
-        },
-        {
-          "name": "email",
-          "type": "TEXT",
-          "constraints": ["UNIQUE"]
-        }
-      ]
-    }
-  }
-}
-```
-
-#### `list_tables` - List Tables
-List all tables in a database.
-
-**Parameters:**
-- `database` (required): Database name
-
-**Example:**
-```json
-{
-  "name": "list_tables",
-  "arguments": {
-    "database": "my_app_db"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Found 3 tables",
-  "data": ["users", "posts", "comments"],
-  "executionTime": 8
-}
-```
-
-#### `describe_table` - Describe Table
-Get detailed information about a table structure.
-
-**Parameters:**
-- `database` (required): Database name
 - `table` (required): Table name
-
-**Example:**
-```json
-{
-  "name": "describe_table",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Table 'users' described successfully",
-  "data": {
-    "name": "users",
-    "columns": [
-      {
-        "name": "id",
-        "type": "INTEGER",
-        "nullable": false,
-        "defaultValue": null,
-        "constraints": ["PRIMARY KEY"]
-      },
-      {
-        "name": "name",
-        "type": "TEXT",
-        "nullable": false,
-        "defaultValue": null,
-        "constraints": ["NOT NULL"]
-      }
-    ],
-    "indexes": [
-      {
-        "name": "idx_email",
-        "columns": ["email"],
-        "unique": true,
-        "type": "btree"
-      }
-    ],
-    "rowCount": 150,
-    "size": 8192
-  },
-  "executionTime": 15
-}
-```
-
-#### `drop_table` - Drop Table
-Delete a table.
-
-**Parameters:**
-- `database` (required): Database name
-- `table` (required): Table name
-
-**Example:**
-```json
-{
-  "name": "drop_table",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "old_table"
-  }
-}
-```
-
-### 3. CRUD Operations
-
-#### `insert_data` - Insert Data
-Insert records into a table.
-
-**Parameters:**
-- `database` (required): Database name
-- `table` (required): Table name
-- `records` (required): Array of records to insert
-
-**Example:**
-```json
-{
-  "name": "insert_data",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "records": [
-      {
-        "name": "John Doe",
-        "email": "john@example.com",
-        "age": 30
-      },
-      {
-        "name": "Jane Smith",
-        "email": "jane@example.com",
-        "age": 25
-      }
-    ]
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "2 records inserted successfully",
-  "data": {
-    "insertedCount": 2
-  },
-  "executionTime": 25
-}
-```
-
-#### `query_data` - Query Data
-Query data from a table with filtering and sorting.
-
-**Parameters:**
-- `database` (required): Database name
-- `table` (required): Table name
-- `conditions` (optional): WHERE conditions
-- `limit` (optional): Maximum number of rows (1-10000)
+- `conditions` (optional): WHERE conditions object
+- `limit` (optional): Maximum rows to return
 - `offset` (optional): Number of rows to skip
-- `orderBy` (optional): Column to order by
+- `orderBy` (optional): Column to sort by
 - `orderDirection` (optional): Sort direction ("ASC" or "DESC")
 
-**Example:**
-```json
-{
-  "name": "query_data",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "conditions": {
-      "age": 30
-    },
-    "limit": 10,
-    "orderBy": "name",
-    "orderDirection": "ASC"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Query executed successfully",
-  "data": {
-    "columns": ["id", "name", "email", "age"],
-    "rows": [
-      {
-        "id": 1,
-        "name": "John Doe",
-        "email": "john@example.com",
-        "age": 30
-      }
-    ],
-    "rowCount": 1
-  },
-  "executionTime": 18
-}
-```
-
-#### `update_data` - Update Data
-Update records in a table.
+#### `insert_data` - Insert Records
+Insert records into memory.db table.
 
 **Parameters:**
-- `database` (required): Database name
 - `table` (required): Table name
-- `conditions` (required): WHERE conditions
+- `records` (required): Array of record objects to insert
+
+#### `update_data` - Update Records
+Update records in memory.db table.
+
+**Parameters:**
+- `table` (required): Table name
+- `conditions` (required): WHERE conditions for records to update
 - `updates` (required): Fields to update
 
-**Example:**
-```json
-{
-  "name": "update_data",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "conditions": {
-      "id": 1
-    },
-    "updates": {
-      "age": 31,
-      "email": "john.doe@example.com"
-    }
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "1 records updated successfully",
-  "data": {
-    "changes": 1
-  },
-  "executionTime": 22
-}
-```
-
-#### `delete_data` - Delete Data
-Delete records from a table.
+#### `delete_data` - Delete Records
+Delete records from memory.db table.
 
 **Parameters:**
-- `database` (required): Database name
 - `table` (required): Table name
-- `conditions` (required): WHERE conditions
+- `conditions` (required): WHERE conditions for records to delete
 
-**Example:**
-```json
-{
-  "name": "delete_data",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "conditions": {
-      "age": 30
-    }
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "1 records deleted successfully",
-  "data": {
-    "changes": 1
-  },
-  "executionTime": 16
-}
-```
-
-#### `count_records` - Count Records
-Count records in a table.
+#### `import_data` - Import Data
+Import data from CSV or JSON file into memory.db table.
 
 **Parameters:**
-- `database` (required): Database name
-- `table` (required): Table name
-- `conditions` (optional): WHERE conditions
+- `table` (required): Target table name
+- `filePath` (required): Path to source file
+- `format` (optional): File format ("csv" or "json")
+- `options` (optional): Import options (delimiter, hasHeader)
 
-**Example:**
-```json
-{
-  "name": "count_records",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "conditions": {
-      "age": 30
-    }
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Count: 5",
-  "data": {
-    "count": 5
-  },
-  "executionTime": 12
-}
-```
-
-### 4. Advanced Operations
-
-#### `execute_sql` - Execute SQL
-Execute raw SQL queries.
+#### `export_data` - Export Data
+Export memory.db table data to CSV or JSON file.
 
 **Parameters:**
-- `database` (required): Database name
-- `query` (required): SQL query to execute
-- `parameters` (optional): Query parameters
-
-**Example:**
-```json
-{
-  "name": "execute_sql",
-  "arguments": {
-    "database": "my_app_db",
-    "query": "SELECT u.name, COUNT(p.id) as post_count FROM users u LEFT JOIN posts p ON u.id = p.user_id GROUP BY u.id, u.name",
-    "parameters": []
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "SQL query executed successfully",
-  "data": {
-    "columns": ["name", "post_count"],
-    "rows": [
-      {
-        "name": "John Doe",
-        "post_count": 5
-      },
-      {
-        "name": "Jane Smith",
-        "post_count": 3
-      }
-    ],
-    "rowCount": 2
-  },
-  "executionTime": 35
-}
-```
-
-#### `import_from_file` - Import from File
-Import data from CSV, JSON, or SQL files.
-
-**Parameters:**
-- `database` (required): Database name
-- `table` (required): Table name
-- `filePath` (required): Path to the file
-- `format` (optional): File format ("csv", "json", "sql", default: "csv")
-- `options` (optional): Import options
-
-**CSV Options:**
-- `delimiter`: CSV delimiter (default: ",")
-- `hasHeader`: Whether CSV has header row (default: true)
-- `encoding`: File encoding (default: "utf8")
-
-**Example:**
-```json
-{
-  "name": "import_from_file",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "filePath": "/path/to/users.csv",
-    "format": "csv",
-    "options": {
-      "delimiter": ",",
-      "hasHeader": true,
-      "encoding": "utf8"
-    }
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Imported 100 records from CSV file",
-  "data": {
-    "importedCount": 100,
-    "format": "csv",
-    "filePath": "/path/to/users.csv"
-  },
-  "executionTime": 150
-}
-```
-
-#### `export_to_file` - Export to File
-Export table data to CSV, JSON, or SQL files.
-
-**Parameters:**
-- `database` (required): Database name
-- `table` (required): Table name
+- `table` (required): Source table name
 - `filePath` (required): Output file path
-- `format` (optional): Output format ("csv", "json", "sql", default: "csv")
-- `conditions` (optional): WHERE conditions
-- `options` (optional): Export options
+- `format` (optional): Output format ("csv" or "json")
+- `conditions` (optional): WHERE conditions to filter export
+- `options` (optional): Export options (delimiter, includeHeader)
 
-**CSV Options:**
-- `delimiter`: CSV delimiter (default: ",")
-- `includeHeader`: Include header in CSV (default: true)
-- `encoding`: File encoding (default: "utf8")
+### Project Guardian Memory Tools (10 tools)
 
-**Example:**
-```json
-{
-  "name": "export_to_file",
-  "arguments": {
-    "database": "my_app_db",
-    "table": "users",
-    "filePath": "/path/to/users_export.csv",
-    "format": "csv",
-    "conditions": {
-      "age": 30
-    },
-    "options": {
-      "delimiter": ",",
-      "includeHeader": true,
-      "encoding": "utf8"
-    }
-  }
-}
-```
+#### `initialize_memory` - Initialize Memory System
+Set up the project memory database schema and tables.
 
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Exported 25 records to CSV file",
-  "data": {
-    "exportedCount": 25,
-    "format": "csv",
-    "filePath": "/path/to/users_export.csv",
-    "columns": 4
-  },
-  "executionTime": 45
-}
-```
+**Parameters:** None
 
-#### `backup_database` - Backup Database
-Create a backup of a database.
+#### `create_entity` - Create Project Entities
+Create entities in the project knowledge graph (supports single or batch).
 
 **Parameters:**
-- `database` (required): Database name
-- `backupPath` (required): Backup file path
+- `entities` (required): Array of entity objects
+  - `name`: Entity name
+  - `entityType`: Type (project, task, person, resource)
+  - `observations`: Array of notes about the entity
 
-**Example:**
-```json
-{
-  "name": "backup_database",
-  "arguments": {
-    "database": "my_app_db",
-    "backupPath": "/path/to/backup/my_app_db_backup.db"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Database 'my_app_db' backed up successfully",
-  "data": {
-    "backupPath": "/path/to/backup/my_app_db_backup.db"
-  },
-  "executionTime": 200
-}
-```
-
-#### `restore_database` - Restore Database
-Restore a database from backup.
+#### `create_relation` - Create Entity Relationships
+Create relationships between project entities (supports single or batch).
 
 **Parameters:**
-- `backupPath` (required): Backup file path
-- `databaseName` (required): New database name
+- `relations` (required): Array of relation objects
+  - `from`: Source entity name
+  - `to`: Target entity name
+  - `relationType`: Relationship type (depends_on, blocks, owns, etc.)
 
-**Example:**
-```json
-{
-  "name": "restore_database",
-  "arguments": {
-    "backupPath": "/path/to/backup/my_app_db_backup.db",
-    "databaseName": "restored_db"
-  }
-}
-```
+#### `add_observation` - Add Entity Observations
+Add observations/notes to project entities (supports single or batch).
 
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Database 'restored_db' restored successfully",
-  "data": {
-    "databaseName": "restored_db",
-    "path": "./restored_db.db"
-  },
-  "executionTime": 180
-}
-```
+**Parameters:**
+- `observations` (required): Array of observation objects
+  - `entityName`: Target entity name
+  - `contents`: Array of observation strings to add
+
+#### `delete_entity` - Delete Project Entities
+Remove entities and their relations from project memory (supports single or batch).
+
+**Parameters:**
+- `entityNames` (required): Array of entity names to delete
+
+#### `delete_observation` - Remove Entity Observations
+Remove specific observations from entities (supports single or batch).
+
+**Parameters:**
+- `deletions` (required): Array of deletion objects
+  - `entityName`: Target entity name
+  - `observations`: Array of observation strings to remove
+
+#### `delete_relation` - Delete Entity Relationships
+Remove relationships between project entities (supports single or batch).
+
+**Parameters:**
+- `relations` (required): Array of relation objects to delete
+  - `from`: Source entity name
+  - `to`: Target entity name
+  - `relationType`: Relationship type to delete
+
+#### `read_graph` - Read Project Knowledge Graph
+Retrieve the entire project knowledge graph with all entities and relationships.
+
+**Parameters:** None
+
+#### `search_nodes` - Search Project Knowledge
+Search for entities and relations matching a query across names, types, and content.
+
+**Parameters:**
+- `query` (required): Search term
+
+#### `open_node` - Get Entity Details
+Retrieve detailed information about project entities (supports single or batch).
+
+**Parameters:**
+- `names` (required): Array of entity names to retrieve
 
 ## Usage Examples
 
-### Basic Database Operations
+### Project Guardian Setup
 
 ```typescript
-// Create a database
-const createResult = await mcpClient.callTool('create_database', {
-  name: 'my_app_db'
-});
+// Initialize the project memory system
+const initResult = await mcpClient.callTool('initialize_memory', {});
 
-// Create a table
-const tableResult = await mcpClient.callTool('create_table', {
-  database: 'my_app_db',
-  name: 'users',
-  schema: {
-    columns: [
-      { name: 'id', type: 'INTEGER', constraints: ['PRIMARY KEY', 'AUTOINCREMENT'] },
-      { name: 'name', type: 'TEXT', constraints: ['NOT NULL'] },
-      { name: 'email', type: 'TEXT', constraints: ['UNIQUE'] }
-    ]
-  }
-});
-
-// Insert data
-const insertResult = await mcpClient.callTool('insert_data', {
-  database: 'my_app_db',
-  table: 'users',
-  records: [
-    { name: 'John Doe', email: 'john@example.com' },
-    { name: 'Jane Smith', email: 'jane@example.com' }
+// Create your first project entities
+const entityResult = await mcpClient.callTool('create_entity', {
+  entities: [
+    {
+      name: 'web_platform',
+      entityType: 'project',
+      observations: ['Main web application platform', 'React + Node.js stack', 'Q2 2024 delivery']
+    },
+    {
+      name: 'user_authentication',
+      entityType: 'feature',
+      observations: ['OAuth2 implementation', 'Google/GitHub providers', 'JWT tokens']
+    }
   ]
 });
 
-// Query data
-const queryResult = await mcpClient.callTool('query_data', {
-  database: 'my_app_db',
-  table: 'users',
-  conditions: { name: 'John Doe' }
+// Establish project relationships
+const relationResult = await mcpClient.callTool('create_relation', {
+  relations: [
+    {
+      from: 'user_authentication',
+      to: 'web_platform',
+      relationType: 'part_of'
+    }
+  ]
 });
 ```
 
-### Advanced Operations
+### Project Management Workflow
 
 ```typescript
-// Execute complex SQL
+// Add progress observations
+await mcpClient.callTool('add_observation', {
+  observations: [
+    {
+      entityName: 'user_authentication',
+      contents: [
+        'Completed OAuth2 setup for Google provider',
+        'JWT implementation finished',
+        'Unit tests passing at 95% coverage'
+      ]
+    }
+  ]
+});
+
+// Search project knowledge
+const searchResult = await mcpClient.callTool('search_nodes', {
+  query: 'authentication'
+});
+
+// Read entire project knowledge graph
+const graphResult = await mcpClient.callTool('read_graph', {});
+
+// Get detailed entity information
+const entityDetails = await mcpClient.callTool('open_node', {
+  names: ['user_authentication', 'web_platform']
+});
+```
+
+### Database Operations
+
+```typescript
+// Execute custom SQL queries
 const sqlResult = await mcpClient.callTool('execute_sql', {
-  database: 'my_app_db',
-  query: `
-    SELECT u.name, COUNT(p.id) as post_count 
-    FROM users u 
-    LEFT JOIN posts p ON u.id = p.user_id 
-    GROUP BY u.id, u.name 
-    ORDER BY post_count DESC
-  `
+  query: 'SELECT * FROM entities WHERE entity_type = ?',
+  parameters: ['project']
 });
 
-// Import from CSV
-const importResult = await mcpClient.callTool('import_from_file', {
-  database: 'my_app_db',
-  table: 'users',
-  filePath: '/path/to/users.csv',
-  format: 'csv',
-  options: { hasHeader: true }
+// Query project data
+const queryResult = await mcpClient.callTool('query_data', {
+  table: 'entities',
+  conditions: { entity_type: 'task' },
+  limit: 10
 });
 
-// Export to JSON
-const exportResult = await mcpClient.callTool('export_to_file', {
-  database: 'my_app_db',
-  table: 'users',
-  filePath: '/path/to/users_export.json',
-  format: 'json'
-});
-
-// Backup database
-const backupResult = await mcpClient.callTool('backup_database', {
-  database: 'my_app_db',
-  backupPath: '/path/to/backup/my_app_db.db'
+// Import/export data
+const importResult = await mcpClient.callTool('import_data', {
+  table: 'project_data',
+  filePath: './project_backup.csv',
+  format: 'csv'
 });
 ```
 
-### Integration with Other MCP Servers
+## Configuration
 
-```typescript
-// Use with filesystem server to manage database files
-const fsResult = await filesystemClient.callTool('list_directory', {
-  path: './databases'
-});
+### For Cursor IDE
 
-// Use with chaining server to orchestrate complex workflows
-const chainResult = await chainingClient.callTool('generate_route_suggestions', {
-  task: 'Import user data from CSV and create analytics report',
-  criteria: {
-    prioritizeReliability: true,
-    maxComplexity: 5
+Add this server to your Cursor MCP configuration (`~/.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "project-guardian": {
+      "command": "node",
+      "args": ["/path/to/project-guardian-mcp/dist/index.js"],
+      "env": {}
+    }
   }
-});
+}
+```
+
+### For Claude Desktop
+
+Add this server to your Claude Desktop configuration (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "project-guardian": {
+      "command": "node",
+      "args": ["/path/to/project-guardian-mcp/dist/index.js"],
+      "env": {}
+    }
+  }
+}
 ```
 
 ## Development
 
-### Project Structure
-
-```
-database-mcp-server/
-├── src/
-│   ├── index.ts              # Main entry point
-│   ├── server.ts             # MCP server implementation
-│   ├── sqlite-manager.ts     # SQLite database operations
-│   ├── import-export.ts      # Import/export functionality
-│   └── types.ts              # Type definitions and schemas
-├── dist/                     # Compiled JavaScript output
-├── __tests__/               # Test files
-├── package.json             # Dependencies and scripts
-├── tsconfig.json            # TypeScript configuration
-├── jest.config.js           # Jest testing configuration
-└── README.md                # This documentation
-```
-
-### Development Commands
-
+1. **Clone the repository:**
 ```bash
-# Install dependencies
+git clone https://github.com/1999AZZAR/project-guardian-mcp.git
+cd project-guardian-mcp
+```
+
+2. **Install dependencies:**
+```bash
 npm install
+```
 
-# Build the project
+3. **Build the project:**
+```bash
 npm run build
+```
 
-# Run in development mode with hot reload
-npm run dev
-
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run linting
-npm run lint
-
-# Fix linting issues
-npm run lint:fix
-
-# Clean build directory
-npm run clean
-
-# Start production server
+4. **Test the server:**
+```bash
 npm start
 ```
-
-### Testing
-
-The server includes comprehensive Jest tests:
-
-```bash
-npm test
-```
-
-**Test Coverage:**
-- Database management (create, list, drop)
-- Table management (create, list, describe, drop)
-- CRUD operations (insert, query, update, delete, count)
-- Advanced operations (SQL execution, import/export, backup/restore)
-- Error handling and edge cases
-- Input validation and schema validation
-
-### Error Handling
-
-The server includes comprehensive error handling:
-
-- **Input Validation**: All parameters validated with Zod schemas
-- **Database Errors**: Graceful handling of SQL errors, constraint violations, and connection issues
-- **File Operations**: Proper error handling for import/export operations
-- **Resource Cleanup**: Automatic cleanup of database connections and resources
-- **Process Management**: Proper signal handling for graceful shutdown
-
-### Performance Considerations
-
-- **Connection Pooling**: Efficient database connection management
-- **Batch Operations**: Optimized for large dataset operations
-- **Memory Management**: Automatic cleanup prevents memory leaks
-- **Query Optimization**: Support for prepared statements and parameterized queries
-
-## Security Considerations
-
-- **Input Sanitization**: All inputs validated and sanitized
-- **SQL Injection Prevention**: Parameterized queries prevent SQL injection
-- **File Path Validation**: Import/export paths validated to prevent directory traversal
-- **Error Information**: Error messages don't expose sensitive information
-- **Resource Limits**: Query limits prevent resource exhaustion
-
-## Integration with MCP Ecosystem
-
-This database server integrates seamlessly with other MCP servers:
-
-### Filesystem Integration
-- Import/export operations work with filesystem server
-- Database files can be managed through filesystem operations
-- Backup/restore operations integrate with file management
-
-### Chaining Integration
-- Database operations can be orchestrated through chaining server
-- Complex workflows involving data processing and analysis
-- Integration with other data sources and processing tools
-
-### Research Integration
-- Store research results from Google Search and Wikipedia servers
-- Build knowledge bases from external data sources
-- Create persistent storage for analysis results
 
 ## License
 
 MIT License - see LICENSE file for details.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes and add tests
-4. Run the test suite: `npm test`
-5. Commit your changes: `git commit -m 'Add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
-
-## Support
-
-For issues and questions:
-- **GitHub Issues**: [Open an issue](https://github.com/1999AZZAR/database-mcp-server/issues)
-- **Documentation**: Check this README for comprehensive usage examples
-- **Examples**: See the examples section above for common use cases
-
----
-
-**Database MCP Server** - Comprehensive database operations for the Model Context Protocol ecosystem.

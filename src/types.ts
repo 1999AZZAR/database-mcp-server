@@ -132,6 +132,93 @@ export const RestoreDatabaseSchema = z.object({
   databaseName: z.string().min(1),
 });
 
+// Memory Management schemas
+export const CreateEntitySchema = z.object({
+  name: z.string().min(1),
+  entityType: z.string().min(1),
+  observations: z.array(z.string()).min(1),
+});
+
+export const CreateEntitiesSchema = z.object({
+  entities: z.array(z.object({
+    name: z.string().min(1),
+    entityType: z.string().min(1),
+    observations: z.array(z.string()),
+  })).min(1),
+});
+
+export const CreateRelationSchema = z.object({
+  from: z.string().min(1),
+  to: z.string().min(1),
+  relationType: z.string().min(1),
+});
+
+export const CreateRelationsSchema = z.object({
+  relations: z.array(z.object({
+    from: z.string().min(1),
+    to: z.string().min(1),
+    relationType: z.string().min(1),
+  })).min(1),
+});
+
+export const AddObservationSchema = z.object({
+  entityName: z.string().min(1),
+  contents: z.array(z.string()).min(1),
+});
+
+export const AddObservationsSchema = z.object({
+  observations: z.array(z.object({
+    entityName: z.string().min(1),
+    contents: z.array(z.string()),
+  })).min(1),
+});
+
+export const DeleteEntitySchema = z.object({
+  entityName: z.string().min(1),
+});
+
+export const DeleteEntitiesSchema = z.object({
+  entityNames: z.array(z.string()).min(1),
+});
+
+export const DeleteObservationSchema = z.object({
+  entityName: z.string().min(1),
+  observations: z.array(z.string()).min(1),
+});
+
+export const DeleteObservationsSchema = z.object({
+  deletions: z.array(z.object({
+    entityName: z.string().min(1),
+    observations: z.array(z.string()),
+  })).min(1),
+});
+
+export const DeleteRelationSchema = z.object({
+  from: z.string().min(1),
+  to: z.string().min(1),
+  relationType: z.string().min(1),
+});
+
+export const DeleteRelationsSchema = z.object({
+  relations: z.array(z.object({
+    from: z.string().min(1),
+    to: z.string().min(1),
+    relationType: z.string().min(1),
+  })).min(1),
+});
+
+export const SearchNodesSchema = z.object({
+  query: z.string().min(1),
+});
+
+export const OpenNodeSchema = z.object({
+  name: z.string().min(1),
+});
+
+export const OpenNodesSchema = z.object({
+  names: z.array(z.string()).min(1),
+});
+
 // Response types
 export interface DatabaseInfo {
   name: string;
@@ -178,4 +265,30 @@ export interface DatabaseOperationResult {
   data?: any;
   error?: string;
   executionTime?: number;
+}
+
+// Memory Management interfaces
+export interface Entity {
+  name: string;
+  entityType: string;
+  observations: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Relation {
+  from: string;
+  to: string;
+  relationType: string;
+  createdAt: string;
+}
+
+export interface KnowledgeGraph {
+  entities: Entity[];
+  relations: Relation[];
+}
+
+export interface SearchResult {
+  entities: Entity[];
+  relations: Relation[];
 }
