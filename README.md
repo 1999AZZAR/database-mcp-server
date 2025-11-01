@@ -19,6 +19,13 @@ A focused Model Context Protocol (MCP) server designed as your project's memory 
 - **Data Transfer**: Import/export CSV and JSON files
 - **17 Tools Total**: Focused toolset for maximum clarity
 
+### AI Guidance System
+- **5 Resources**: Templates, best practices, and current project status
+- **5 Prompts**: Pre-built workflows for common project management tasks
+- **Expert Guidance**: Step-by-step instructions for complex operations
+- **Contextual Help**: Adaptive prompts based on user needs
+- **Knowledge Base**: Comprehensive project management wisdom
+
 ### Advanced Features
 - **Schema Validation**: Comprehensive input validation with Zod schemas
 - **Error Handling**: Detailed error messages and graceful failure handling
@@ -227,6 +234,77 @@ Retrieve detailed information about project entities (supports single or batch).
 
 **Parameters:**
 - `names` (required): Array of entity names to retrieve
+
+## AI Guidance System
+
+Project Guardian MCP includes comprehensive resources and prompts to help AI models effectively use the toolset for project management.
+
+### Available Resources
+
+Project Guardian provides 5 key resources that AI models can read to understand project management concepts and best practices:
+
+#### `project-guardian://templates/entity-types`
+Standard entity types for project management with examples and usage guidelines.
+
+#### `project-guardian://templates/relationship-types`
+Common relationship types between project entities with practical examples.
+
+#### `project-guardian://templates/project-workflows`
+Standard workflows for using Project Guardian tools in different scenarios.
+
+#### `project-guardian://templates/best-practices`
+Comprehensive best practices guide for effective project knowledge management.
+
+#### `project-guardian://status/current-graph`
+Current state of the project knowledge graph with summary statistics.
+
+### Available Prompts
+
+Project Guardian offers 5 specialized prompts for complex project management workflows:
+
+#### `project-setup` - Project Initialization
+**Arguments:**
+- `project_name` (required): Name of the project
+- `team_members` (optional): Comma-separated list of team members
+
+Provides step-by-step guidance for setting up a new project structure with appropriate entities and relationships.
+
+#### `sprint-planning` - Sprint Planning
+**Arguments:**
+- `sprint_name` (required): Name/number of the sprint
+- `duration_days` (optional): Sprint duration in days
+
+Guides through comprehensive sprint planning including task breakdown, dependencies, and capacity planning.
+
+#### `progress-update` - Progress Tracking
+**Arguments:**
+- `task_name` (required): Name of the task to update
+- `progress_notes` (required): Progress update description
+
+Structured process for updating task progress and managing dependencies.
+
+#### `risk-assessment` - Risk Management
+**Arguments:**
+- `risk_description` (required): Description of the risk
+- `impact_level` (optional): High, Medium, or Low impact
+
+Complete workflow for documenting risks, identifying impacts, and developing mitigation strategies.
+
+#### `retrospective` - Project Retrospective
+**Arguments:**
+- `time_period` (required): Time period being reviewed (e.g., "last sprint", "Q1")
+
+Comprehensive retrospective process including data analysis, pattern identification, and improvement action creation.
+
+### How AI Models Use Guidance
+
+1. **Discovery**: List available resources and prompts to understand capabilities
+2. **Learning**: Read relevant resources to understand project management concepts
+3. **Planning**: Use appropriate prompts for complex workflows
+4. **Execution**: Follow structured guidance to use tools effectively
+5. **Verification**: Check results and iterate as needed
+
+This guidance system ensures AI models can provide expert-level project management assistance using the Project Guardian toolset.
 
 ## Usage Examples
 
