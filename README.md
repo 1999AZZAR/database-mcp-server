@@ -21,7 +21,7 @@ A focused Model Context Protocol (MCP) server designed as your project's memory 
 
 ### AI Guidance System
 - **5 Resources**: Templates, best practices, and current project status
-- **5 Prompts**: Pre-built workflows for common project management tasks
+- **14 Prompts**: Comprehensive pre-built workflows for all aspects of project management
 - **Expert Guidance**: Step-by-step instructions for complex operations
 - **Contextual Help**: Adaptive prompts based on user needs
 - **Knowledge Base**: Comprehensive project management wisdom
@@ -40,12 +40,18 @@ A focused Model Context Protocol (MCP) server designed as your project's memory 
 - **Resource Management**: Automatic cleanup of connections and resources
 - **Testing**: Comprehensive Jest test suite with high coverage
 
+## Requirements
+
+- **Node.js**: >= 18.0.0
+- **npm**: Latest stable version
+- **SQLite3**: Automatically installed as dependency
+
 ## Installation
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/1999AZZAR/database-mcp-server.git
-cd database-mcp-server
+git clone https://github.com/1999AZZAR/project-guardian-mcp-server.git
+cd project-guardian-mcp-server
 ```
 
 2. **Install dependencies:**
@@ -63,39 +69,6 @@ npm run build
 npm start
 ```
 
-## Configuration
-
-### For Cursor IDE
-
-Add this server to your Cursor MCP configuration (`~/.cursor/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "database-mcp": {
-      "command": "node",
-      "args": ["/path/to/database-mcp-server/dist/index.js"],
-      "env": {}
-    }
-  }
-}
-```
-
-### For Claude Desktop
-
-Add this server to your Claude Desktop configuration (`claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "database-mcp": {
-      "command": "node",
-      "args": ["/path/to/database-mcp-server/dist/index.js"],
-      "env": {}
-    }
-  }
-}
-```
 
 ## Available Tools
 
@@ -260,8 +233,9 @@ Current state of the project knowledge graph with summary statistics.
 
 ### Available Prompts
 
-Project Guardian offers 5 specialized prompts for complex project management workflows:
+Project Guardian offers **28 specialized prompts** covering all aspects of comprehensive project management, from basic setup to advanced enterprise workflows:
 
+#### Core Project Management
 #### `project-setup` - Project Initialization
 **Arguments:**
 - `project_name` (required): Name of the project
@@ -283,6 +257,43 @@ Guides through comprehensive sprint planning including task breakdown, dependenc
 
 Structured process for updating task progress and managing dependencies.
 
+#### `retrospective` - Project Retrospective
+**Arguments:**
+- `time_period` (required): Time period being reviewed (e.g., "last sprint", "Q1")
+
+Comprehensive retrospective process including data analysis, pattern identification, and improvement action creation.
+
+#### Quality & Process Management
+#### `code-review` - Code Review Process
+**Arguments:**
+- `pull_request_title` (required): Title of the pull request being reviewed
+- `reviewer_name` (optional): Name of the reviewer
+
+Structured code review process with technical checklists, issue documentation, and approval workflows.
+
+#### `bug-tracking` - Bug Management
+**Arguments:**
+- `bug_description` (required): Description of the bug or issue
+- `severity_level` (optional): Critical, High, Medium, or Low severity
+
+Complete bug tracking workflow from discovery to resolution with impact analysis and stakeholder communication.
+
+#### `technical-debt-assessment` - Technical Debt Analysis
+**Arguments:**
+- `component_name` (required): Name of the component or codebase being assessed
+- `assessment_scope` (optional): Scope of assessment (file, module, system)
+
+Comprehensive technical debt identification, prioritization, and remediation planning.
+
+#### Release & Deployment Management
+#### `release-planning` - Release Planning
+**Arguments:**
+- `release_version` (required): Version number for the release (e.g., "v2.1.0")
+- `release_date` (optional): Target release date
+
+Complete release planning process including quality gates, risk assessment, and deployment coordination.
+
+#### Risk & Change Management
 #### `risk-assessment` - Risk Management
 **Arguments:**
 - `risk_description` (required): Description of the risk
@@ -290,11 +301,139 @@ Structured process for updating task progress and managing dependencies.
 
 Complete workflow for documenting risks, identifying impacts, and developing mitigation strategies.
 
-#### `retrospective` - Project Retrospective
+#### `change-management` - Change Control
 **Arguments:**
-- `time_period` (required): Time period being reviewed (e.g., "last sprint", "Q1")
+- `change_description` (required): Description of the proposed change
+- `impact_assessment` (optional): High, Medium, or Low impact assessment
 
-Comprehensive retrospective process including data analysis, pattern identification, and improvement action creation.
+Structured change management process with impact analysis, approval workflows, and implementation tracking.
+
+#### Team & Resource Management
+#### `team-productivity` - Productivity Analysis
+**Arguments:**
+- `timeframe` (required): Time period to analyze (week, month, quarter)
+- `focus_area` (optional): Area to focus on (velocity, quality, collaboration)
+
+Team productivity assessment with performance metrics, root cause analysis, and improvement planning.
+
+#### `resource-allocation` - Resource Planning
+**Arguments:**
+- `resource_type` (required): Type of resource (human, infrastructure, budget)
+- `planning_horizon` (optional): Planning timeframe (sprint, quarter, year)
+
+Resource allocation optimization with capacity planning, gap analysis, and utilization tracking.
+
+#### Documentation & Communication
+#### `stakeholder-communication` - Communication Management
+**Arguments:**
+- `communication_type` (required): Type of communication (status_update, issue_alert, milestone_reached)
+- `audience` (optional): Target audience (team, management, client, all)
+
+Stakeholder communication planning and execution with audience-specific strategies and effectiveness tracking.
+
+#### `documentation-management` - Documentation Updates
+**Arguments:**
+- `documentation_type` (required): Type of documentation (api, user_guide, technical_spec)
+- `update_reason` (optional): Reason for documentation update
+
+Documentation maintenance process with content planning, review workflows, and publishing coordination.
+
+#### Requirements & Planning Management
+#### `requirements-gathering` - Requirements Gathering
+**Arguments:**
+- `requirement_type` (required): Type of requirements (functional, non-functional, business, technical)
+- `stakeholders` (optional): Comma-separated list of key stakeholders
+
+Guides through comprehensive requirements gathering process with stakeholder management and requirement categorization.
+
+#### `user-story-management` - User Story Management
+**Arguments:**
+- `feature_name` (required): Name of the feature or epic
+- `user_role` (optional): Primary user role (e.g., "customer", "admin", "developer")
+
+Structured process for creating, managing, and prioritizing user stories with acceptance criteria and dependencies.
+
+#### Quality & Technical Management
+#### `testing-strategy` - Testing Strategy Development
+**Arguments:**
+- `application_type` (required): Type of application (web, mobile, api, desktop)
+- `criticality_level` (optional): Business criticality (critical, high, medium, low)
+
+Comprehensive testing strategy development including automated testing, quality gates, and risk-based testing.
+
+#### `security-assessment` - Security Assessment
+**Arguments:**
+- `assessment_scope` (required): Scope of security assessment (application, infrastructure, data)
+- `compliance_requirements` (optional): Compliance standards (GDPR, HIPAA, SOC2, etc.)
+
+Security assessment framework with vulnerability management, compliance verification, and security controls implementation.
+
+#### `performance-optimization` - Performance Optimization
+**Arguments:**
+- `performance_metric` (required): Primary metric to optimize (response_time, throughput, resource_usage)
+- `optimization_goal` (optional): Specific performance target or improvement percentage
+
+Performance monitoring setup, bottleneck identification, and optimization implementation with continuous monitoring.
+
+#### `ci-cd-setup` - CI/CD Pipeline Setup
+**Arguments:**
+- `pipeline_type` (required): Type of pipeline (build, test, deploy, full_ci_cd)
+- `target_platform` (optional): Deployment target (aws, azure, gcp, kubernetes, heroku)
+
+Complete CI/CD pipeline setup including quality gates, rollback procedures, and security integration.
+
+#### `architecture-review` - Architecture Review
+**Arguments:**
+- `architecture_type` (required): Type of architecture (microservices, monolithic, serverless, hybrid)
+- `review_focus` (optional): Primary focus area (scalability, security, maintainability, performance)
+
+Architectural assessment framework with design pattern analysis, technology stack evaluation, and improvement recommendations.
+
+#### Knowledge & Team Management
+#### `knowledge-transfer` - Knowledge Transfer
+**Arguments:**
+- `knowledge_domain` (required): Domain of knowledge (technical, process, business)
+- `transfer_recipients` (optional): Who needs to receive the knowledge (team, individual, department)
+
+Knowledge transfer planning and execution with session management, documentation, and effectiveness validation.
+
+#### `vendor-management` - Vendor Management
+**Arguments:**
+- `vendor_type` (required): Type of vendor service (cloud, development, consulting, infrastructure)
+- `contract_value` (optional): Contract value range (small, medium, large, enterprise)
+
+Vendor relationship management including contract tracking, performance monitoring, and cost optimization.
+
+#### Incident & Crisis Management
+#### `incident-response` - Incident Response
+**Arguments:**
+- `incident_severity` (required): Severity level (critical, high, medium, low)
+- `incident_type` (optional): Type of incident (security, performance, functionality, availability)
+
+Incident response framework with containment, recovery, root cause analysis, and post-incident review.
+
+#### Financial & Resource Management
+#### `cost-management` - Cost Management
+**Arguments:**
+- `cost_category` (required): Primary cost category (infrastructure, personnel, tools, licenses)
+- `budget_constraint` (optional): Budget constraint level (strict, flexible, unlimited)
+
+Cost monitoring, optimization strategies, and budget management with forecasting and reporting.
+
+#### Customer & Innovation Management
+#### `customer-feedback` - Customer Feedback Management
+**Arguments:**
+- `feedback_channel` (required): Primary feedback channel (survey, support, reviews, analytics)
+- `feedback_focus` (optional): Focus area (usability, features, performance, support)
+
+Customer feedback collection, analysis, and action planning with continuous improvement cycles.
+
+#### `innovation-planning` - Innovation Planning
+**Arguments:**
+- `innovation_type` (required): Type of innovation (product, process, technology, business_model)
+- `risk_tolerance` (optional): Risk tolerance level (conservative, moderate, aggressive)
+
+Innovation management framework with idea generation, experimentation, and success measurement.
 
 ### How AI Models Use Guidance
 
@@ -408,7 +547,7 @@ Add this server to your Cursor MCP configuration (`~/.cursor/mcp.json`):
   "mcpServers": {
     "project-guardian": {
       "command": "node",
-      "args": ["/path/to/project-guardian-mcp/dist/index.js"],
+      "args": ["/path/to/project-guardian-mcp-server/dist/index.js"],
       "env": {}
     }
   }
@@ -424,19 +563,49 @@ Add this server to your Claude Desktop configuration (`claude_desktop_config.jso
   "mcpServers": {
     "project-guardian": {
       "command": "node",
-      "args": ["/path/to/project-guardian-mcp/dist/index.js"],
+      "args": ["/path/to/project-guardian-mcp-server/dist/index.js"],
       "env": {}
     }
   }
 }
 ```
 
+## Project Structure
+
+```
+project-guardian-mcp-server/
+├── src/
+│   ├── index.ts              # Main entry point
+│   ├── server.ts             # MCP server implementation with all handlers
+│   ├── memory-manager.ts     # Knowledge graph and entity management
+│   ├── sqlite-manager.ts     # Database operations and connection management
+│   ├── import-export.ts      # CSV/JSON data import and export functionality
+│   └── types.ts              # TypeScript type definitions and schemas
+├── __tests__/                # Test files
+│   ├── import-export.test.ts
+│   └── sqlite-manager.test.ts
+├── dist/                     # Compiled JavaScript output
+├── memory.db                 # SQLite database file (created on first run)
+├── package.json              # Project dependencies and scripts
+├── tsconfig.json            # TypeScript configuration
+├── jest.config.js           # Test configuration
+└── README.md                # This documentation
+```
+
+### Key Components
+
+- **server.ts**: Core MCP server with tool and resource handlers for all 17 tools and 5 resources
+- **memory-manager.ts**: Knowledge graph operations for entities, relationships, and observations
+- **sqlite-manager.ts**: Database abstraction layer with connection pooling and schema management
+- **import-export.ts**: Data transfer utilities for CSV and JSON formats
+- **types.ts**: Zod schemas for input validation and TypeScript type safety
+
 ## Development
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/1999AZZAR/project-guardian-mcp.git
-cd project-guardian-mcp
+git clone https://github.com/1999AZZAR/project-guardian-mcp-server.git
+cd project-guardian-mcp-server
 ```
 
 2. **Install dependencies:**
