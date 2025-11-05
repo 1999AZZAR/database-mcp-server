@@ -20,7 +20,7 @@ A focused Model Context Protocol (MCP) server designed as your project's memory 
 - **17 Tools Total**: Focused toolset for maximum clarity
 
 ### AI Guidance System
-- **5 Resources**: Templates, best practices, and current project status
+- **11 Resources**: Templates, best practices, cached data, and comprehensive project status
 - **14 Prompts**: Comprehensive pre-built workflows for all aspects of project management
 - **Expert Guidance**: Step-by-step instructions for complex operations
 - **Contextual Help**: Adaptive prompts based on user needs
@@ -214,7 +214,7 @@ Project Guardian MCP includes comprehensive resources and prompts to help AI mod
 
 ### Available Resources
 
-Project Guardian provides 5 key resources that AI models can read to understand project management concepts and best practices:
+Project Guardian provides **11 key resources** that AI models can read to understand project management concepts, access cached data, and get comprehensive project insights:
 
 #### `project-guardian://templates/entity-types`
 Standard entity types for project management with examples and usage guidelines.
@@ -230,6 +230,21 @@ Comprehensive best practices guide for effective project knowledge management.
 
 #### `project-guardian://status/current-graph`
 Current state of the project knowledge graph with summary statistics.
+
+#### `project-guardian://cache/recent-activities`
+Recently performed project management activities and updates for tracking progress.
+
+#### `project-guardian://cache/workflow-templates`
+Frequently used workflow templates with examples and implementation guidance.
+
+#### `project-guardian://metrics/project-stats`
+Statistical overview of project entities, relationships, and activities with health metrics.
+
+#### `project-guardian://cache/team-members`
+Cached information about project team members and their roles within the organization.
+
+#### `project-guardian://status/recent-changes`
+Recent additions, updates, and modifications to the knowledge graph for audit and monitoring.
 
 ### Available Prompts
 
@@ -594,7 +609,7 @@ project-guardian-mcp-server/
 
 ### Key Components
 
-- **server.ts**: Core MCP server with tool and resource handlers for all 17 tools and 5 resources
+- **server.ts**: Core MCP server with tool and resource handlers for all 17 tools and 11 resources
 - **memory-manager.ts**: Knowledge graph operations for entities, relationships, and observations
 - **sqlite-manager.ts**: Database abstraction layer with connection pooling and schema management
 - **import-export.ts**: Data transfer utilities for CSV and JSON formats

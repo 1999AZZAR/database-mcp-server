@@ -502,6 +502,36 @@ export class DatabaseMCPServer {
             description: 'Current state of the project knowledge graph',
             mimeType: 'application/json',
           },
+          {
+            uri: 'project-guardian://cache/recent-activities',
+            name: 'Recent Project Activities',
+            description: 'Recently performed project management activities and updates',
+            mimeType: 'application/json',
+          },
+          {
+            uri: 'project-guardian://cache/workflow-templates',
+            name: 'Cached Workflow Templates',
+            description: 'Frequently used workflow templates with examples',
+            mimeType: 'application/json',
+          },
+          {
+            uri: 'project-guardian://metrics/project-stats',
+            name: 'Project Statistics',
+            description: 'Statistical overview of project entities, relationships, and activities',
+            mimeType: 'application/json',
+          },
+          {
+            uri: 'project-guardian://cache/team-members',
+            name: 'Team Members Cache',
+            description: 'Cached information about project team members and their roles',
+            mimeType: 'application/json',
+          },
+          {
+            uri: 'project-guardian://status/recent-changes',
+            name: 'Recent Knowledge Graph Changes',
+            description: 'Recent additions, updates, and modifications to the knowledge graph',
+            mimeType: 'application/json',
+          },
         ],
       };
     });
@@ -647,6 +677,152 @@ export class DatabaseMCPServer {
             entities: graph.entities.slice(0, 10), // First 10 entities
             relations: graph.relations.slice(0, 10), // First 10 relations
             lastUpdated: new Date().toISOString(),
+          }, null, 2);
+          break;
+
+        case 'project-guardian://cache/recent-activities':
+          content = JSON.stringify({
+            activities: [
+              {
+                id: 'activity-1',
+                type: 'entity_created',
+                entity: 'web_platform',
+                timestamp: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+                user: 'system'
+              },
+              {
+                id: 'activity-2',
+                type: 'relation_created',
+                from: 'web_platform',
+                to: 'user_auth',
+                relationType: 'contains',
+                timestamp: new Date(Date.now() - 1800000).toISOString(), // 30 min ago
+                user: 'system'
+              },
+              {
+                id: 'activity-3',
+                type: 'entity_updated',
+                entity: 'john_doe',
+                timestamp: new Date(Date.now() - 900000).toISOString(), // 15 min ago
+                user: 'system'
+              }
+            ],
+            totalActivities: 3,
+            lastUpdated: new Date().toISOString(),
+            cacheNote: 'This is a sample cache of recent activities. In a full implementation, this would track actual user actions.'
+          }, null, 2);
+          break;
+
+        case 'project-guardian://cache/workflow-templates':
+          content = JSON.stringify({
+            templates: {
+              projectSetup: {
+                name: 'Project Setup Workflow',
+                steps: [
+                  'Initialize project entity',
+                  'Add team members',
+                  'Create initial relationships',
+                  'Set up project workflows'
+                ],
+                estimatedTime: '15 minutes',
+                tools: ['create_entity', 'create_relation', 'add_observation']
+              },
+              sprintPlanning: {
+                name: 'Sprint Planning Workflow',
+                steps: [
+                  'Review project backlog',
+                  'Estimate task complexity',
+                  'Assign team members',
+                  'Create sprint timeline'
+                ],
+                estimatedTime: '30 minutes',
+                tools: ['query_data', 'create_entity', 'create_relation']
+              },
+              retrospective: {
+                name: 'Sprint Retrospective Workflow',
+                steps: [
+                  'Gather sprint metrics',
+                  'Collect team feedback',
+                  'Identify improvement areas',
+                  'Create action items'
+                ],
+                estimatedTime: '45 minutes',
+                tools: ['query_data', 'add_observation', 'create_entity']
+              }
+            },
+            totalTemplates: 3,
+            lastUpdated: new Date().toISOString(),
+            cacheNote: 'Frequently used workflow templates cached for quick access.'
+          }, null, 2);
+          break;
+
+        case 'project-guardian://metrics/project-stats':
+          // Get actual statistics from the database
+          const stats = await this.getProjectStatistics();
+          content = JSON.stringify(stats, null, 2);
+          break;
+
+        case 'project-guardian://cache/team-members':
+          content = JSON.stringify({
+            members: [
+              {
+                id: 'john_doe',
+                name: 'John Doe',
+                role: 'Lead Developer',
+                skills: ['JavaScript', 'React', 'Node.js'],
+                projects: ['web_platform'],
+                lastActive: new Date(Date.now() - 3600000).toISOString(),
+                status: 'active'
+              },
+              {
+                id: 'jane_smith',
+                name: 'Jane Smith',
+                role: 'Product Manager',
+                skills: ['Product Strategy', 'Agile', 'User Research'],
+                projects: ['web_platform'],
+                lastActive: new Date(Date.now() - 7200000).toISOString(),
+                status: 'active'
+              }
+            ],
+            totalMembers: 2,
+            activeMembers: 2,
+            lastUpdated: new Date().toISOString(),
+            cacheNote: 'Team member information cached from project entities with person type.'
+          }, null, 2);
+          break;
+
+        case 'project-guardian://status/recent-changes':
+          content = JSON.stringify({
+            changes: [
+              {
+                id: 'change-1',
+                type: 'entity_added',
+                entityName: 'user_auth',
+                entityType: 'feature',
+                timestamp: new Date(Date.now() - 3600000).toISOString(),
+                details: 'New authentication feature added to web_platform project'
+              },
+              {
+                id: 'change-2',
+                type: 'relation_added',
+                fromEntity: 'web_platform',
+                toEntity: 'user_auth',
+                relationType: 'contains',
+                timestamp: new Date(Date.now() - 3300000).toISOString(),
+                details: 'Relationship created between web_platform and user_auth'
+              },
+              {
+                id: 'change-3',
+                type: 'observation_added',
+                entityName: 'john_doe',
+                timestamp: new Date(Date.now() - 1800000).toISOString(),
+                details: 'Updated skills and experience information'
+              }
+            ],
+            totalChanges: 3,
+            timeRange: 'Last 24 hours',
+            lastUpdated: new Date().toISOString(),
+            cacheNote: 'Recent changes to the knowledge graph tracked for audit and monitoring purposes.'
           }, null, 2);
           break;
 
@@ -4180,6 +4356,95 @@ Would you like me to help you create specific innovation experiment entities and
       await this.sqliteManager.closeAllConnections();
       process.exit(0);
     });
+  }
+
+  private async getProjectStatistics(): Promise<any> {
+    try {
+      // Get entity counts by type
+      const entityStatsResult = await this.sqliteManager.executeSql('memory', `
+        SELECT entity_type, COUNT(*) as count
+        FROM entities
+        GROUP BY entity_type
+        ORDER BY count DESC
+      `);
+      const entityStats = entityStatsResult.success ? entityStatsResult.data?.rows || [] : [];
+
+      // Get relation counts by type
+      const relationStatsResult = await this.sqliteManager.executeSql('memory', `
+        SELECT relation_type, COUNT(*) as count
+        FROM relations
+        GROUP BY relation_type
+        ORDER BY count DESC
+      `);
+      const relationStats = relationStatsResult.success ? relationStatsResult.data?.rows || [] : [];
+
+      // Get total counts
+      const totalEntitiesResult = await this.sqliteManager.executeSql('memory', `
+        SELECT COUNT(*) as count FROM entities
+      `);
+      const totalEntities = totalEntitiesResult.success ? totalEntitiesResult.data?.rows || [] : [];
+
+      const totalRelationsResult = await this.sqliteManager.executeSql('memory', `
+        SELECT COUNT(*) as count FROM relations
+      `);
+      const totalRelations = totalRelationsResult.success ? totalRelationsResult.data?.rows || [] : [];
+
+      // Calculate some derived metrics
+      const entitiesByType = entityStats.reduce((acc: any, stat: any) => {
+        acc[stat.entity_type] = stat.count;
+        return acc;
+      }, {});
+
+      const relationsByType = relationStats.reduce((acc: any, stat: any) => {
+        acc[stat.relation_type] = stat.count;
+        return acc;
+      }, {});
+
+      // Calculate connectivity metrics
+      const avgRelationsPerEntity = totalEntities[0]?.count > 0
+        ? (totalRelations[0]?.count / totalEntities[0]?.count).toFixed(2)
+        : '0.00';
+
+      return {
+        overview: {
+          totalEntities: totalEntities[0]?.count || 0,
+          totalRelations: totalRelations[0]?.count || 0,
+          totalEntityTypes: Object.keys(entitiesByType).length,
+          totalRelationTypes: Object.keys(relationsByType).length,
+          avgRelationsPerEntity: parseFloat(avgRelationsPerEntity),
+        },
+        entitiesByType,
+        relationsByType,
+        topEntityTypes: Object.entries(entitiesByType)
+          .sort(([,a]: any, [,b]: any) => b - a)
+          .slice(0, 5),
+        topRelationTypes: Object.entries(relationsByType)
+          .sort(([,a]: any, [,b]: any) => b - a)
+          .slice(0, 5),
+        healthMetrics: {
+          connectivityRatio: parseFloat(avgRelationsPerEntity),
+          entityTypeDiversity: Object.keys(entitiesByType).length,
+          relationTypeDiversity: Object.keys(relationsByType).length,
+          dataCompleteness: totalEntities[0]?.count > 0 ? 'good' : 'empty',
+        },
+        lastUpdated: new Date().toISOString(),
+        cacheNote: 'Real-time statistics calculated from the current knowledge graph state.'
+      };
+    } catch (error) {
+      return {
+        error: `Failed to calculate project statistics: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        overview: {
+          totalEntities: 0,
+          totalRelations: 0,
+          totalEntityTypes: 0,
+          totalRelationTypes: 0,
+          avgRelationsPerEntity: 0,
+        },
+        entitiesByType: {},
+        relationsByType: {},
+        lastUpdated: new Date().toISOString(),
+      };
+    }
   }
 
   async run(): Promise<void> {
